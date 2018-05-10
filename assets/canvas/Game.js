@@ -25,6 +25,7 @@ Game.prototype.preload = function () {
 	this.load.image('text', 'assets/images/text.png');
 	this.load.image('ennemy', 'assets/images/ennemy.png');
 	this.load.image('knuckles', 'assets/images/knuckles.png');
+	this.load.bitmapFont('bubble', 'assets/fonts/BubbleGum.png', 'assets/fonts/BubbleGum.fnt');
 };
 
 Game.prototype.create = function () {
@@ -44,8 +45,8 @@ Game.prototype.create = function () {
 	player.body.collideWorldBounds = true;
 
 	//Displaying health
-	healthText = this.add.text(20, 20, 'Health : 42', { font: "48px BubbleGum", fill: "#ea3737" });
-	pointsText = this.add.text(1300, 700, '0', { font: "48px BubbleGum", fill: "#fed521" });
+	healthText = this.add.text(20, 20, 'Health : 42', { font: "48px bubble", fill: "#ea3737" });
+	pointsText = this.add.text(1300, 700, '0', { font: "48px bubble", fill: "#fed521" });
 
 	//Displaying text
 	text = this.add.sprite(55, 666, 'text');
