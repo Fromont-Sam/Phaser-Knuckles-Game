@@ -21,10 +21,10 @@ Game.prototype.init = function () {
 
 Game.prototype.preload = function () {
 	this.load.image('grass', 'assets/images/grass.png');
-	this.load.image('player', 'assets/images/player.png');
 	this.load.image('text', 'assets/images/text.png');
-	this.load.image('ennemy', 'assets/images/ennemy.png');
 	this.load.image('knuckles', 'assets/images/knuckles.png');
+	this.load.spritesheet('player', 'assets/images/player.png', 112, 93, 3);
+	this.load.spritesheet('enemy', 'assets/images/enemy.png', 112, 93, 3);
 	this.load.bitmapFont('bubble', 'assets/fonts/BubbleGum.png', 'assets/fonts/BubbleGum.fnt');
 };
 
@@ -41,6 +41,7 @@ Game.prototype.create = function () {
 
 	//Displaying player
 	player = this.add.sprite(40, 310, 'player');
+    player.animations.add('run');
 	this.physics.arcade.enable(player);
 	player.body.collideWorldBounds = true;
 	player.body.setCircle(50);
@@ -53,7 +54,7 @@ Game.prototype.create = function () {
 	text = this.add.sprite(55, 666, 'text');
 	text.alpha = 0;
 	this.add.tween(text).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 0, true);
-	//Spawning ennemies
+	//Spawning enemies
 	this.time.events.repeat(Phaser.Timer.SECOND, 20, createBox, this);
 	this.time.events.loop(100, addPoints, this);
 };
@@ -80,23 +81,38 @@ Game.prototype.update = function () {
 		}
 	}
 	//Inputs
+	var vertical = true;
+	var horizontal = true;
 	if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT))
     {
-        player.x -= 4;
+		player.x -= 4;
     }
     else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
     {
-        player.x += 4;
-    }
+		player.x += 4;
+	}
+	else {
+		vertical = false;
+	}
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.UP))
     {
-        player.y -= 4;
+		player.y -= 4;
     }
     else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN))
     {
-        player.y += 4;
-    }
+		player.y += 4;
+	}
+	else {
+		horizontal = false;
+	}
+	if(!vertical && !horizontal) {
+		player.frame = 0;
+		player.animations.stop();
+	}
+	else {
+		player.animations.play('run', 9, true);
+	}
 };
 
 function createBox() {
@@ -104,7 +120,9 @@ function createBox() {
 		return;
 	}
 	//Init sprites
-	sprite = this.add.sprite(this.world.randomX, this.world.randomY, 'ennemy');
+	sprite = this.add.sprite(this.world.randomX, this.world.randomY, 'enemy');
+    sprite.animations.add('run');
+    sprite.animations.play('run', 9, true);
     this.physics.arcade.enable(sprite);
 	sprite.body.collideWorldBounds = true;
 	//Hitbox and speed
