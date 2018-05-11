@@ -63,6 +63,7 @@ Game.prototype.update = function () {
 	if(gameOver) {
 		return;
 	}
+	//Colliding tests
 	for (let i = 0; i < enemies.length; i++) {
 		//this.game.debug.body(enemies[i]);
 		if (this.physics.arcade.overlap(player, enemies[i]) && !isColliding) {
@@ -78,6 +79,7 @@ Game.prototype.update = function () {
 			break;
 		}
 	}
+	//Inputs
 	if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT))
     {
         player.x -= 4;
@@ -101,14 +103,17 @@ function createBox() {
 	if(gameOver) {
 		return;
 	}
+	//Init sprites
 	sprite = this.add.sprite(this.world.randomX, this.world.randomY, 'ennemy');
     this.physics.arcade.enable(sprite);
 	sprite.body.collideWorldBounds = true;
+	//Hitbox and speed
 	sprite.body.setCircle(50);
     sprite.body.bounce.set(1);
 	sprite.body.velocity.x = this.rnd.realInRange(-200, 200);
 	sprite.body.velocity.y = this.rnd.realInRange(-200, 200);
 	enemies.push(sprite);
+	//Display sprites in front
 	this.world.bringToTop(player);
 	this.world.bringToTop(healthText);
 	this.world.bringToTop(pointsText);
