@@ -43,6 +43,7 @@ Game.prototype.create = function () {
 	player = this.add.sprite(40, 310, 'player');
 	this.physics.arcade.enable(player);
 	player.body.collideWorldBounds = true;
+	player.body.setCircle(50);
 
 	//Displaying health
 	healthText = this.add.text(20, 20, 'Health : 42', { font: "48px bubble", fill: "#ea3737" });
@@ -58,11 +59,13 @@ Game.prototype.create = function () {
 };
 
 Game.prototype.update = function () {
+	//this.game.debug.body(player);
 	if(gameOver) {
 		return;
 	}
 	for (let i = 0; i < enemies.length; i++) {
-		if (player.getBounds().intersects(enemies[i].getBounds()) && !isColliding) {
+		//this.game.debug.body(enemies[i]);
+		if (this.physics.arcade.overlap(player, enemies[i]) && !isColliding) {
 			isColliding = true;
 			this.time.events.add(Phaser.Timer.SECOND * 2.6, function() { isColliding = false; }, this);
 			this.time.events.repeat(Phaser.Timer.SECOND * 0.1, 26, function() { player.visible = !player.visible; }, this);
@@ -100,7 +103,8 @@ function createBox() {
 	}
 	sprite = this.add.sprite(this.world.randomX, this.world.randomY, 'ennemy');
     this.physics.arcade.enable(sprite);
-    sprite.body.collideWorldBounds = true;
+	sprite.body.collideWorldBounds = true;
+	sprite.body.setCircle(50);
     sprite.body.bounce.set(1);
 	sprite.body.velocity.x = this.rnd.realInRange(-200, 200);
 	sprite.body.velocity.y = this.rnd.realInRange(-200, 200);
