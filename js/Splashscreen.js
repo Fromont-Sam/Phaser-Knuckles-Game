@@ -10,6 +10,8 @@ Splashscreen.prototype = Splashscreen_proto;
 Splashscreen.prototype.constructor = Splashscreen;
 let effect;
 let kuckles, title;
+let highscoreText;
+let highScore = 0;
 
 Splashscreen.prototype.init = function () {
 	this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -38,6 +40,20 @@ Splashscreen.prototype.create = function () {
 		gameOver = false;
 		this.game.state.start('Game');
 	};
+
+	//Highscore text
+	let txt = 'Highscore  : ';
+	if(points === undefined && highScore === 0)
+		 txt += '?';
+	else if(highScore < points)
+	{
+        txt = 'Highscore! : ' + points;
+        highScore = points;
+	}else
+        txt += highScore;
+
+    highscoreText = this.add.text(1000, 20, txt, { font: "48px bubble", fill: "#ea3737" });
+
 	//Loop
 	this.time.events.loop(Phaser.Timer.SECOND * 0.75, function () { blink(title) }, this);
 };

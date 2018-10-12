@@ -1,12 +1,10 @@
 function Game() {
-	
 	Phaser.State.call(this);
-	
 }
 
 /** @type Phaser.State */
 let Game_proto = Object.create(Phaser.State.prototype);
-let player, text, health, points
+let player, text, health, points;
 let healthText, pointsText;
 let isColliding;
 let group;
@@ -32,7 +30,7 @@ Game.prototype.create = function () {
 	this.add.tileSprite(0, 0, 1440, 810, 'grass');
 	this.input.keyboard.onPressCallback = null;
 	//Init
-	health = 42, points=0;
+	health = 3, points=0;
 	enemies = [];
 	isColliding = false;
 
@@ -44,10 +42,10 @@ Game.prototype.create = function () {
     player.animations.add('run');
 	this.physics.arcade.enable(player);
 	player.body.collideWorldBounds = true;
-	player.body.setCircle(50);
+	player.body.setCircle(30, 25, 20)
 
 	//Displaying health
-	healthText = this.add.text(20, 20, 'Health : 42', { font: "48px bubble", fill: "#ea3737" });
+	healthText = this.add.text(20, 20, 'Health : 3', { font: "48px bubble", fill: "#ea3737" });
 	pointsText = this.add.text(1300, 700, '0', { font: "48px bubble", fill: "#fed521" });
 
 	//Displaying text
@@ -66,12 +64,12 @@ Game.prototype.update = function () {
 	}
 	//Colliding tests
 	for (let i = 0; i < enemies.length; i++) {
-		//this.game.debug.body(enemies[i]);
+		this.game.debug.body(enemies[i]);
 		if (this.physics.arcade.overlap(player, enemies[i]) && !isColliding) {
 			isColliding = true;
 			this.time.events.add(Phaser.Timer.SECOND * 2.6, function() { isColliding = false; }, this);
 			this.time.events.repeat(Phaser.Timer.SECOND * 0.1, 26, function() { player.visible = !player.visible; }, this);
-			health -= 14;
+			health -= 1;
 			healthText.text = 'Health : ' + health;
 			if(health<=0) {
 				gameOver = true;
@@ -126,7 +124,7 @@ function createBox() {
     this.physics.arcade.enable(sprite);
 	sprite.body.collideWorldBounds = true;
 	//Hitbox and speed
-	sprite.body.setCircle(50);
+	sprite.body.setCircle(30, 25, 20);
     sprite.body.bounce.set(1);
 	sprite.body.velocity.x = this.rnd.realInRange(-200, 200);
 	sprite.body.velocity.y = this.rnd.realInRange(-200, 200);
